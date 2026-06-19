@@ -83,6 +83,7 @@ class FestivalInfo(BaseModel):
     date: date
     category: str       # "major", "minor", "vrat", "sankranti"
     description: str = ""
+    emoji: str = "🪷"   # Display icon for calendar/daily views
 
 
 class DailyViewData(BaseModel):
@@ -97,6 +98,7 @@ class CalendarDay(BaseModel):
     date: date
     tithi_name: str = ""
     festivals: list[str] = []
+    festival_emojis: list[str] = []
     is_today: bool = False
     is_current_month: bool = True
 

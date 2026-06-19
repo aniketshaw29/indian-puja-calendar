@@ -31,13 +31,32 @@ class Ayanamsa:
     drik_id: int = 0
 
 
-# ---------- Default location: Kolkata ----------
-DEFAULT_LOCATION = Location(
-    name="Kolkata",
-    latitude=22.5726,
-    longitude=88.3639,
-    timezone=ZoneInfo("Asia/Kolkata"),
-)
+# ---------- Location registry ----------
+LOCATIONS = {
+    "kolkata": Location(
+        name="Kolkata",
+        latitude=22.5726,
+        longitude=88.3639,
+        timezone=ZoneInfo("Asia/Kolkata"),
+    ),
+    "bangalore": Location(
+        name="Bangalore",
+        latitude=12.9716,
+        longitude=77.5946,
+        timezone=ZoneInfo("Asia/Kolkata"),
+    ),
+}
+
+# Default location: Kolkata
+DEFAULT_LOCATION = LOCATIONS["kolkata"]
+
+
+def get_location(key: str = "kolkata") -> Location:
+    """Resolve a location key string to a Location object.
+
+    Falls back to DEFAULT_LOCATION (Kolkata) if the key is unknown.
+    """
+    return LOCATIONS.get(key, DEFAULT_LOCATION)
 
 # ---------- Ayanamsa ----------
 DEFAULT_AYANAMSA = Ayanamsa(

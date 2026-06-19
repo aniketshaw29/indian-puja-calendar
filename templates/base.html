@@ -21,13 +21,20 @@
   <!-- Navigation header -->
   <header class="site-header">
     <div class="container">
-      <a href="/" class="site-logo">
+      <a href="/?loc={{ current_loc_key|default('kolkata') }}" class="site-logo">
         <span class="logo-icon">&#x1F54A;</span>
         <span class="logo-text">Puja<br><small>Timelines</small></span>
       </a>
       <nav class="site-nav">
-        <a href="/" class="nav-link">Today</a>
-        <a href="/calendar" class="nav-link">Calendar</a>
+        <a href="/?loc={{ current_loc_key|default('kolkata') }}" class="nav-link"
+           hx-get="/?loc={{ current_loc_key|default('kolkata') }}" hx-target="main" hx-swap="innerHTML">Today</a>
+        <a href="/calendar?loc={{ current_loc_key|default('kolkata') }}" class="nav-link"
+           hx-get="/calendar?loc={{ current_loc_key|default('kolkata') }}" hx-target="main" hx-swap="innerHTML">Calendar</a>
+        <select class="loc-picker" onchange="var u=new URL(window.location);u.searchParams.set('loc',this.value);window.location.href=u.toString()">
+          {% for loc_item in available_locations|default([]) %}
+          <option value="{{ loc_item.key }}" {% if loc_item.key == current_loc_key|default('kolkata') %}selected{% endif %}>{{ loc_item.name }}</option>
+          {% endfor %}
+        </select>
       </nav>
     </div>
   </header>
@@ -40,7 +47,7 @@
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
-      <p>Based on drik-panchanga calculations &middot; Location: Kolkata</p>
+      <p>Based on drik-panchanga calculations &middot; Location: {{ current_loc_name|default('Kolkata') }}</p>
     </div>
   </footer>
 

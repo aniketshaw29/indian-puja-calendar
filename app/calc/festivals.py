@@ -68,6 +68,7 @@ def get_festivals_for_date(
                 name="Makar Sankranti",
                 date=d,
                 category="major",
+                emoji="☀️",
                 description="Sun enters Capricorn — harvest festival across India.",
             )
         )
@@ -79,6 +80,7 @@ def get_festivals_for_date(
                 name="Pongal",
                 date=d,
                 category="major",
+                emoji="🌾",
                 description="Tamil harvest festival, first day of Uttarayana.",
             )
         )
@@ -90,6 +92,7 @@ def get_festivals_for_date(
                 name="Republic Day",
                 date=d,
                 category="minor",
+                emoji="🇮🇳",
                 description="Constitution of India came into effect (1950).",
             )
         )
@@ -101,6 +104,7 @@ def get_festivals_for_date(
                 name="Independence Day",
                 date=d,
                 category="minor",
+                emoji="🇮🇳",
                 description="India gained independence in 1947.",
             )
         )
@@ -112,6 +116,7 @@ def get_festivals_for_date(
                 name="Gandhi Jayanti",
                 date=d,
                 category="minor",
+                emoji="🕊️",
                 description="Birth anniversary of Mahatma Gandhi.",
             )
         )

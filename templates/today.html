@@ -12,8 +12,8 @@
 <div class="date-header">
   <time class="date-label" datetime="{{ view_date }}">{{ data.panchanga.vaara }}, {{ view_date }}</time>
   <div class="date-nav">
-    <a href="/day?date={{ prev_date }}" class="nav-arrow" hx-get="/day?date={{ prev_date }}" hx-target="main" hx-swap="innerHTML">&larr; Previous</a>
-    <a href="/day?date={{ next_date }}" class="nav-arrow" hx-get="/day?date={{ next_date }}" hx-target="main" hx-swap="innerHTML">Next &rarr;</a>
+    <a href="/day?date={{ prev_date }}&loc={{ current_loc_key|default('kolkata') }}" class="nav-arrow" hx-get="/day?date={{ prev_date }}&loc={{ current_loc_key|default('kolkata') }}" hx-target="main" hx-swap="innerHTML">&larr; Previous</a>
+    <a href="/day?date={{ next_date }}&loc={{ current_loc_key|default('kolkata') }}" class="nav-arrow" hx-get="/day?date={{ next_date }}&loc={{ current_loc_key|default('kolkata') }}" hx-target="main" hx-swap="innerHTML">Next &rarr;</a>
   </div>
 </div>
 
@@ -64,27 +64,18 @@
 </section>
 {% endif %}
 
-<!-- Muhurta cards -->
+<!-- Muhurta table -->
 <section class="muhurta-section">
   <h2 class="section-title">Time Windows</h2>
-  <div class="muhurta-grid">
+  <table class="muhurta-table">
     {% for m in data.muhurtas %}
-    <div class="muhurta-card muhurta-{{ m.category }}">
-      <div class="muhurta-header">
-        <span class="muhurta-name">{{ m.name }}</span>
-        <span class="muhurta-badge">{{ m.category }}</span>
-      </div>
-      <div class="muhurta-times">
-        <span>{{ m.starts_at.strftime('%I:%M %p') }}</span>
-        <span class="muhurta-arrow">&rarr;</span>
-        <span>{{ m.ends_at.strftime('%I:%M %p') }}</span>
-      </div>
-      {% if m.description %}
-      <p class="muhurta-desc">{{ m.description }}</p>
-      {% endif %}
-    </div>
+    <tr class="muhurta-row muhurta-{{ m.category }}" {% if m.description %}title="{{ m.description }}"{% endif %}>
+      <td class="muhurta-name">{{ m.name }}</td>
+      <td class="muhurta-times">{{ m.starts_at.strftime('%I:%M %p') }} &rarr; {{ m.ends_at.strftime('%I:%M %p') }}</td>
+      <td class="muhurta-badge-cell"><span class="muhurta-badge {{ m.category }}">{{ m.category }}</span></td>
+    </tr>
     {% endfor %}
-  </div>
+  </table>
 </section>
 
 <!-- Panchang details -->
@@ -124,12 +115,9 @@
   <h2 class="section-title">Festivals</h2>
   <div class="festival-list">
     {% for f in data.festivals %}
-    <div class="festival-card">
+    <div class="festival-card" {% if f.description %}title="{{ f.description }}"{% endif %}>
       <span class="festival-category">{{ f.category }}</span>
-      <strong class="festival-name">{{ f.name }}</strong>
-      {% if f.description %}
-      <p class="festival-desc">{{ f.description }}</p>
-      {% endif %}
+      <strong class="festival-name"><span class="festival-emoji">{{ f.emoji }}</span> {{ f.name }}</strong>
     </div>
     {% endfor %}
   </div>

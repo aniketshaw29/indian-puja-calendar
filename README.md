@@ -7,20 +7,28 @@ Default location: **Kolkata** (22.5726°N, 88.3639°E).
 
 ## Quick Start
 
+**All commands must run from the project root** (`indian-puja-calendar/`), not from inside `.venv/`.
+
 ```powershell
-# 1. Create virtual environment
+# 1. Navigate to project root (if not already there)
+cd indian-puja-calendar
+
+# 2. Create virtual environment
 python -m venv .venv
 
-# 2. Activate it
+# 3. Activate it
 .venv\Scripts\Activate.ps1
 
-# 3. Install dependencies
+#    If you accidentally cd'd into .venv\Scripts, go back to root:
+#    cd ..\..\
+
+# 4. Install dependencies
 python -m pip install -r requirements.txt
 #    ^^^^ use 'python -m pip' instead of bare 'pip' if you see
 #         "No Python at 'c:\python38\python.exe'" — the venv's pip
 #         resolves correctly via python -m.
 
-# 4. Start the dev server
+# 5. Start the dev server
 python -m uvicorn app.main:app --reload --port 8765
 ```
 

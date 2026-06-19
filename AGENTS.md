@@ -4,10 +4,14 @@
 
 ## Setup
 
+Run from project root (`indian-puja-calendar/`), not inside `.venv/`.
+
 ```powershell
+cd indian-puja-calendar            # if not already at root
 python -m venv .venv
 .venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt   # not bare 'pip' — avoids PATH issues
+# if you cd'd elsewhere after activation, cd back to root first
+python -m pip install -r requirements.txt
 python -m uvicorn app.main:app --reload --port 8765
 # Open http://localhost:8765
 ```

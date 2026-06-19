@@ -13,6 +13,7 @@ from fastapi import APIRouter, Query, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
+from app.config import LOCATIONS, get_location
 from app.views.monthly import build_month_view
 
 router = APIRouter()
@@ -24,6 +25,7 @@ async def calendar_page(
     request: Request,
     year: Optional[int] = Query(None),
     month: Optional[int] = Query(None),
+    loc: str = Query("kolkata"),
 ):
     """Monthly calendar view with tithi and festival overlays."""
     today = date.today()
@@ -33,14 +35,22 @@ async def calendar_page(
     if month is None:
         month = today.month
 
-    data = build_month_view(year, month)
+    location = get_location(loc)
+    data = build_month_view(year, month, location.latitude, location.longitude)
+
+    prev = _prev_month(year, month)
+    next_ = _next_month(year, month)
+
     return templates.TemplateResponse(
         request,
         "calendar.html",
         {
             "data": data,
-            "prev_month": _prev_month(year, month),
-            "next_month": _next_month(year, month),
+            "prev_month": prev,
+            "next_month": next_,
+            "current_loc_key": loc,
+            "current_loc_name": location.name,
+            "available_locations": [{"key": k, "name": v.name} for k, v in LOCATIONS.items()],
         },
     )
 

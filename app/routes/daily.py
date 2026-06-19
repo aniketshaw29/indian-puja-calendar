@@ -13,7 +13,7 @@ from fastapi import APIRouter, Query, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from app.config import DEFAULT_LOCATION
+from app.config import DEFAULT_LOCATION, LOCATIONS, get_location
 from app.views.daily import build_daily_view
 
 router = APIRouter()
@@ -104,12 +104,22 @@ def _build_timeline_context(data, d):
 
 
 @router.get("/", response_class=HTMLResponse)
-async def today_page(request: Request):
+async def today_page(
+    request: Request,
+    loc: str = Query("kolkata"),
+):
     """Today's full panchang view with muhurtas and festivals."""
     d = date.today()
-    data = build_daily_view(d)
+    location = get_location(loc)
+    data = build_daily_view(d, location.latitude, location.longitude)
     ctx = _build_timeline_context(data, d)
-    ctx.update({"data": data, "view_date": d.isoformat()})
+    ctx.update({
+        "data": data,
+        "view_date": d.isoformat(),
+        "current_loc_key": loc,
+        "current_loc_name": location.name,
+        "available_locations": [{"key": k, "name": v.name} for k, v in LOCATIONS.items()],
+    })
     return templates.TemplateResponse(request, "today.html", ctx)
 
 
@@ -117,6 +127,7 @@ async def today_page(request: Request):
 async def day_page(
     request: Request,
     date_str: Optional[str] = Query(None, alias="date"),
+    loc: str = Query("kolkata"),
 ):
     """
     Detailed panchang for a specific date.
@@ -132,7 +143,14 @@ async def day_page(
     else:
         d = date.today()
 
-    data = build_daily_view(d)
+    location = get_location(loc)
+    data = build_daily_view(d, location.latitude, location.longitude)
     ctx = _build_timeline_context(data, d)
-    ctx.update({"data": data, "view_date": d.isoformat()})
+    ctx.update({
+        "data": data,
+        "view_date": d.isoformat(),
+        "current_loc_key": loc,
+        "current_loc_name": location.name,
+        "available_locations": [{"key": k, "name": v.name} for k, v in LOCATIONS.items()],
+    })
     return templates.TemplateResponse(request, "today.html", ctx)

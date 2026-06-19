@@ -67,12 +67,14 @@ def build_month_view(
         from app.calc.festivals import get_festivals_for_date
         festivals = get_festivals_for_date(d, lat, lon)
         festival_names = [f.name for f in festivals]
+        festival_emojis = [f.emoji for f in festivals]
 
         days.append(
             CalendarDay(
                 date=d,
                 tithi_name=tithi_name,
                 festivals=festival_names,
+                festival_emojis=festival_emojis,
                 is_today=(d == today),
                 is_current_month=True,
             )
@@ -119,5 +121,6 @@ def _get_tithi_name(
 
     tithi = get_tithi(d, lat, lon)
     if tithi and tithi.name:
-        return f"{tithi.paksha} {tithi.name}"
+        paksha_initial = tithi.paksha[0] if tithi.paksha else "?"
+        return f"{paksha_initial} {tithi.name}"
     return ""
