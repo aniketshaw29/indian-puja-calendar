@@ -15,7 +15,10 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 
 # 3. Install dependencies
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
+#    ^^^^ use 'python -m pip' instead of bare 'pip' if you see
+#         "No Python at 'c:\python38\python.exe'" — the venv's pip
+#         resolves correctly via python -m.
 
 # 4. Start the dev server
 python -m uvicorn app.main:app --reload --port 8765

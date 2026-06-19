@@ -7,7 +7,7 @@
 ```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+python -m pip install -r requirements.txt   # not bare 'pip' — avoids PATH issues
 python -m uvicorn app.main:app --reload --port 8765
 # Open http://localhost:8765
 ```
