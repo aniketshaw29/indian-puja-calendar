@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Puja Timelines — {{ view_date }}{% endblock %}
+
+{% block head %}
+<meta name="description" content="Daily panchang and puja timings for {{ view_date }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Date header -->
+<div class="date-header">
+  <time class="date-label" datetime="{{ view_date }}">{{ data.panchanga.vaara }}, {{ view_date }}</time>
+  <div class="date-nav">
+    <a href="/day?date={{ prev_date }}" class="nav-arrow" hx-get="/day?date={{ prev_date }}" hx-target="main" hx-swap="innerHTML">&larr; Previous</a>
+    <a href="/day?date={{ next_date }}" class="nav-arrow" hx-get="/day?date={{ next_date }}" hx-target="main" hx-swap="innerHTML">Next &rarr;</a>
+  </div>
+</div>
+
+<!-- Tithi banner — the hero -->
+{% if data.panchanga.tithi %}
+<div class="tithi-banner">
+  <span class="tithi-paksha">{{ data.panchanga.tithi.paksha }}</span>
+  <h1 class="tithi-name">{{ data.panchanga.tithi.name }}</h1>
+</div>
+{% endif %}
+
+<!-- Sunrise / Sunset compact info -->
+<div class="sun-times">
+  <div class="sun-time">
+    <span class="sun-label">Sunrise</span>
+    <span class="sun-value">{{ sunrise_str }}</span>
+  </div>
+  <div class="sun-time">
+    <span class="sun-label">Sunset</span>
+    <span class="sun-value">{{ sunset_str }}</span>
+  </div>
+  <div class="sun-time">
+    <span class="sun-label">Day length</span>
+    <span class="sun-value">{{ day_length_str }}</span>
+  </div>
+</div>
+
+<!-- Signature: Muhurta Timeline -->
+{% if timeline_segments %}
+<section class="timeline-section">
+  <h2 class="section-title">Today's Muhurtas</h2>
+  <div class="timeline-container">
+    <div class="timeline-bar">
+      <div class="timeline-tick sunrise-tick">{{ sunrise_str_short }}</div>
+      {% for seg in timeline_segments %}
+      <div class="timeline-block timeline-{{ seg.category }}"
+           style="left: {{ seg.left }}%; width: {{ seg.width }}%;"
+           title="{{ seg.name }}: {{ seg.start }} — {{ seg.end }}">
+        <span class="timeline-label">{{ seg.name }}</span>
+      </div>
+      {% endfor %}
+      <div class="timeline-tick sunset-tick">{{ sunset_str_short }}</div>
+      <!-- Current time marker -->
+      <div class="timeline-now" style="left: {{ now_percent }}%;"
+           title="Now: {{ now_str }}"></div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Muhurta cards -->
+<section class="muhurta-section">
+  <h2 class="section-title">Time Windows</h2>
+  <div class="muhurta-grid">
+    {% for m in data.muhurtas %}
+    <div class="muhurta-card muhurta-{{ m.category }}">
+      <div class="muhurta-header">
+        <span class="muhurta-name">{{ m.name }}</span>
+        <span class="muhurta-badge">{{ m.category }}</span>
+      </div>
+      <div class="muhurta-times">
+        <span>{{ m.starts_at.strftime('%I:%M %p') }}</span>
+        <span class="muhurta-arrow">&rarr;</span>
+        <span>{{ m.ends_at.strftime('%I:%M %p') }}</span>
+      </div>
+      {% if m.description %}
+      <p class="muhurta-desc">{{ m.description }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Panchang details -->
+<section class="panchang-section">
+  <h2 class="section-title">Panchang</h2>
+  <div class="panchang-table">
+    {% if data.panchanga.tithi %}
+    <div class="panchang-row">
+      <span class="panchang-label">Tithi</span>
+      <span class="panchang-value">{{ data.panchanga.tithi.paksha }} {{ data.panchanga.tithi.name }}</span>
+    </div>
+    {% endif %}
+    {% if data.panchanga.nakshatra %}
+    <div class="panchang-row">
+      <span class="panchang-label">Nakshatra</span>
+      <span class="panchang-value">{{ data.panchanga.nakshatra.name }}</span>
+    </div>
+    {% endif %}
+    {% if data.panchanga.yoga %}
+    <div class="panchang-row">
+      <span class="panchang-label">Yoga</span>
+      <span class="panchang-value">{{ data.panchanga.yoga.name }}</span>
+    </div>
+    {% endif %}
+    {% if data.panchanga.karana %}
+    <div class="panchang-row">
+      <span class="panchang-label">Karana</span>
+      <span class="panchang-value">{{ data.panchanga.karana.name }}</span>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Festivals -->
+{% if data.festivals %}
+<section class="festival-section">
+  <h2 class="section-title">Festivals</h2>
+  <div class="festival-list">
+    {% for f in data.festivals %}
+    <div class="festival-card">
+      <span class="festival-category">{{ f.category }}</span>
+      <strong class="festival-name">{{ f.name }}</strong>
+      {% if f.description %}
+      <p class="festival-desc">{{ f.description }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

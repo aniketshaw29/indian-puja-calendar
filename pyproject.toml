@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "indian-puja-calendar"
+version = "0.1.0"
+description = "Indian puja timeline calendar — daily panchang, muhurats, and festivals"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]",
+    "jinja2",
+    "python-multipart",
+    "pyswisseph>=2.10",
+    "pytz",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]

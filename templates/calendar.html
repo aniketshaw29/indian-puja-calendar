@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Calendar — {{ data.month_name }} {{ data.year }}{% endblock %}
+
+{% block content %}
+
+<div class="calendar-header">
+  <h1 class="calendar-title">{{ data.month_name }} <small>{{ data.year }}</small></h1>
+  <div class="calendar-nav">
+    <a href="/calendar?year={{ prev_month.year }}&month={{ prev_month.month }}"
+       class="nav-arrow"
+       hx-get="/calendar?year={{ prev_month.year }}&month={{ prev_month.month }}"
+       hx-target="main" hx-swap="innerHTML">&larr; Previous</a>
+    <a href="/calendar" class="nav-today">Today</a>
+    <a href="/calendar?year={{ next_month.year }}&month={{ next_month.month }}"
+       class="nav-arrow"
+       hx-get="/calendar?year={{ next_month.year }}&month={{ next_month.month }}"
+       hx-target="main" hx-swap="innerHTML">Next &rarr;</a>
+  </div>
+</div>
+
+<div class="calendar-grid">
+  <!-- Day-of-week headers -->
+  <div class="calendar-weekdays">
+    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span>
+    <span>Fri</span><span>Sat</span><span>Sun</span>
+  </div>
+
+  <!-- Day cells -->
+  {% for day in data.days %}
+  <div class="calendar-day
+              {% if not day.is_current_month %}calendar-day-other{% endif %}
+              {% if day.is_today %}calendar-day-today{% endif %}
+              {% if day.festivals %}calendar-day-festival{% endif %}">
+    <a href="/day?date={{ day.date.isoformat() }}" class="day-link"
+       hx-get="/day?date={{ day.date.isoformat() }}" hx-target="body" hx-push-url="true">
+      <span class="day-number">{{ day.date.day }}</span>
+      {% if day.tithi_name %}
+      <span class="day-tithi">{{ day.tithi_name }}</span>
+      {% endif %}
+      {% for f in day.festivals %}
+      <span class="day-festival">{{ f }}</span>
+      {% endfor %}
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
